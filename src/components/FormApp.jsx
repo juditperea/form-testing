@@ -8,34 +8,34 @@ function FormApp() {
     surname: '',
     country: '',
     id: '',
-    usernameError: '',
-    nameError: '',
-    surnameError: '',
-    idError: '',
   });
 
-  const clearForm = () => {
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  const handleInputChange = (event) => {
+  //  const { name, value } = event.target;
+ //   setFormData({ ...formData, [name]: value });
+  };
+ const clearForm = () => {
     setFormData({
       username: '',
       name: '',
       surname: '',
       country: '',
       id: '',
-      usernameError: '',
-      nameError: '',
-      surnameError: '',
-      idError: '',
-    });
-  };
+    });}
+  const handleSubmit = (event) => {
+    event.preventDefault()//evita que el submit refresque la pagina
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    setShowSuccessMessage(true);//poner condicion, si es correcto el formulario
+    //y no hay errores, sera true, si hay errores sera false
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
+   clearForm()
+
+    // Hide the success message after a delay (e.g., 3 seconds)
+    setTimeout(() => {
+      //setShowSuccessMessage(false);
+    }, 3000);
   };
 
   return (
@@ -45,49 +45,42 @@ function FormApp() {
           <p>Username</p>
           <input
             type="text"
+            name="username"
             value={formData.username}
             onChange={handleInputChange}
-            maxLength={10}
-            required
             data-testid="username"
           />
-          <span style={{ color: 'red' }} data-testid="username-error">
-            {formData.usernameError}
-          </span>
+          <span style={{ color: 'red' }} data-testid="username-error"></span>
         </div>
         <div>
           <p>Name</p>
           <input
             type="text"
+            name="name"
             value={formData.name}
             onChange={handleInputChange}
-            required
             data-testid="name"
           />
-          <span style={{ color: 'red' }} data-testid="name-error">
-            {formData.nameError}
-          </span>
+          <span style={{ color: 'red' }} data-testid="name-error"></span>
         </div>
         <div>
           <p>Surname</p>
           <input
             type="text"
+            name="surname"
             value={formData.surname}
             onChange={handleInputChange}
-            required
             data-testid="surname"
           />
-          <span style={{ color: 'red' }} data-testid="surname-error">
-            {formData.surnameError}
-          </span>
+          <span style={{ color: 'red' }} data-testid="surname-error"></span>
         </div>
         <div>
           <p>Country</p>
           <select
             id="country"
+            name="country"
             value={formData.country}
             onChange={handleInputChange}
-            required
             data-testid="country"
           >
             <option value="" data-testid="country-option-empty">
@@ -105,14 +98,12 @@ function FormApp() {
           <p>ID</p>
           <input
             type="text"
+            name="id"
             value={formData.id}
             onChange={handleInputChange}
-            required
             data-testid="id"
           />
-          <span style={{ color: 'red' }} data-testid="id-error">
-            {formData.idError}
-          </span>
+          <span style={{ color: 'red' }} data-testid="id-error"></span>
         </div>
         <button type="submit" data-testid="submit-button">
           Submit
@@ -121,6 +112,8 @@ function FormApp() {
           Clear
         </button>
       </form>
+
+      {showSuccessMessage && <div data-testid="success-message">User created successfully.</div>}
     </div>
   );
 }

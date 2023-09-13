@@ -1,9 +1,10 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent} from '@testing-library/react'
 import '@testing-library/jest-dom'
 import FormApp from '../../components/FormApp'
 
-
+let input;
+let submitButton
 export const FormProjectSteps = ({
   given: Given,
   and: And,
@@ -22,43 +23,44 @@ export const FormProjectSteps = ({
     })
 
   // Scenario: User fills in the form correctly and submits
-  When('the user enters the following information:', (field) => {
-    const formData = table.rowsHash();
+When('the user enters the following information:', () => {
+  const formData = {
+    username: 'JDOE',
+    name: 'JOHN',
+    surname: 'DOE',
+    country: 'SPAIN',
+    id: '492200778D',
+  };
+
+  for (const field in formData) {
   
-    // Fill in the form fields with the provided data
-    for (const field in formData) {
-      const inputField = screen.getByTestId(field);
-      userEvent.type(inputField, formData[field]);
+        input = screen.getByTestId(field);
+      
     }
-  });
-  
-  Then('the [Submit] button should be enabled', () => {
-    const submitButton = screen.getByTestId('Submit');
-  
-    // Add an assertion to check if the [Submit] button is enabled
-    expect(submitButton).toBeEnabled();
-  });
-  
-  When('the user clicks the [Submit] button', () => {
-    const submitButton = screen.getByTestId('Submit');
-  
-    // Simulate clicking the [Submit] button
-    userEvent.click(submitButton);
-  });
-  
-  Then('a success message should be displayed on the new page with the following text:', (docString) => {
-    // Add assertions to check if a success message is displayed with the provided text
-    const successMessage = screen.getByText(docString.trim());
-  
-    // Add an assertion to check if the success message is displayed
-    expect(successMessage).toBeInTheDocument();
-  });
+    expect(input).toBeInTheDocument();
+
+  }
+)
+
+Then('the [Submit] button should be enabled', () => {
+   submitButton = screen.getByTestId('submit-button');
+  expect(submitButton).toBeEnabled();
+});
+
+When('the user clicks the [Submit] button', () => {
+  fireEvent.click(submitButton);
+});
+
+Then('a success message should be displayed on the new page with the following text:', (docString) => {
+  const successMessage = screen.getByText(docString.trim());
+
+  expect(successMessage).toBeInTheDocument();
+});
+
 //
 
   Then('the form should not be submitted', () => {
-    // Add assertions to check that the form was not submitted successfully
-    // For example, you can check for error messages or the absence of a success message
-    const successMessage = screen.queryByTestId('Success Message'); // Replace with the actual success message
+    const successMessage = screen.queryByTestId('Success Message'); 
   
     expect(successMessage).not.toBeInTheDocument();
   });
