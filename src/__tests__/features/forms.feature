@@ -16,7 +16,7 @@ Feature: Form Project
 
     Then the "id" field should be empty
 
- 
+
 
   Scenario Outline: User fills in the form correctly
 
@@ -26,28 +26,27 @@ Feature: Form Project
     And the user selects "SPAIN" from the "country" dropdown
     And the user enters "<id>" on "id"
     Then the [Submit] button should be enabled
-  
-   Examples:
+
+    Examples:
       | username | name | surname | country | id        |
       | JDOE     | JOHN | DOE     | SPAIN   | 49220078D |
 
- Scenario: Success message is shown
+  Scenario: Success message is shown
     When the [Submit] button is enabled
     And the user clicks the [Submit] button
     Then success-message should show the text: "User created successfully."
 
-# Scenario Outline: User fills in the form incorrectly
-    
-#     When the user enters "<username>" on "username"
-#     And the user enters "<name>" on "name"
-#     And the user enters "<surname>" on "surname"
-#     And the user selects "SPAIN" from the "country" dropdown
-#     And the user enters "<id>" on "id"
-#     Then the [Submit] button should be enabled
-#     Examples:
-#     | username     | name          | surname  | country    | id    |
-#     | Johnd0e      | John          | Doe      | SPAIN      | 12345  |
-#   Then the [Submit] button should be disabled
+  Scenario Outline: User fills in the form incorrectly
+
+    When the user enters "<username>" on "username"
+    And the user enters "<name>" on "name"
+    And the user enters "<surname>" on "surname"
+    And the user selects "SPAIN" from the "country" dropdown
+    And the user enters "<id>" on "id"
+    Then the [Submit] button should be disabled
+    Examples:
+      | username | name | surname | country | id    |
+      | Johnd0e  | John | Doe     | SPAIN   | 12345 |
 
 
 
@@ -71,7 +70,7 @@ Feature: Form Project
 #   And the user clicks the [Clear] button
 #   Then all the form fields should be cleared
 
- 
+
 
 # Scenario: User selects a country from the dropdown
 #   When the user selects "Spain" from the "Country" dropdown

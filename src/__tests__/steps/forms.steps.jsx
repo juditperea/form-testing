@@ -1,101 +1,106 @@
-import React from 'react'
-import { render, screen, fireEvent} from '@testing-library/react'
-import '@testing-library/jest-dom'
-import FormApp from '../../components/FormApp'
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import FormApp from "../../components/FormApp";
 
 export const FormProjectSteps = ({
   given: Given,
   and: And,
   when: When,
-  then: Then
-
+  then: Then,
 }) => {
-  Given('the user opens the app', () => {
-    render(<FormApp />) 
-  })
+  Given("the user opens the app", () => {
+    render(<FormApp />);
+  });
 
   // Scenario: Fields are empty
   Then(/^the "(.*)" field should be empty$/, (field) => {
-      expect(screen.getByTestId(field)).toBeNull
-    })
+    expect(screen.getByTestId(field)).toBeNull;
+  });
 
-//Scenario Outline: User fills in the form correctly
- 
+  //Scenario Outline: User fills in the form correctly
+
   When(/^the user enters (.*) on "(.*)"$/, (arg0, arg1) => {
-    fireEvent.change(screen.getByTestId(arg1), arg0, { target: { value: arg0 } })
+    fireEvent.change(screen.getByTestId(arg1), arg0, {
+      target: { value: arg0 },
+    });
   });
 
   When(/^the user selects "(.*)" from the "(.*)" dropdown$/, (arg0, arg1) => {
-    fireEvent.select(screen.getByTestId(arg1), arg0)
+    fireEvent.select(screen.getByTestId(arg1), arg0);
   });
 
-
-  Then('the [Submit] button should be enabled', () => {
-      expect(screen.getByTestId('submit-button')).toBeEnabled()
-
+  Then("the [Submit] button should be enabled", () => {
+    expect(screen.getByTestId("submit-button")).toBeEnabled();
   });
 
-//Scenario: Success message is shown
+  //Scenario: Success message is shown
 
-When('the [Submit] button is enabled', () => {
-  expect(screen.getByTestId('submit-button')).toBeEnabled()
-});
+  When("the [Submit] button is enabled", () => {
+    expect(screen.getByTestId("submit-button")).toBeEnabled();
+  });
 
-When('the user clicks the [Submit] button', () => {
-  fireEvent.click(screen.getByTestId('submit-button'));
-});
+  When("the user clicks the [Submit] button", () => {
+    fireEvent.click(screen.getByTestId("submit-button"));
+  });
 
-Then(/^success-message should show the text: "(.*)"$/, (arg0) => {
+  Then(/^success-message should show the text: "(.*)"$/, (arg0) => {});
 
-});
-//   // Scenario: Errors are highlighted red
-// Then('the following fields should be highlighted in red:', (table) => {
-//   const errorFields = table.raw().map((row) => row[0]);
-  
-//   errorFields.forEach((field) => {
-//     const inputField = screen.getByTestId(field);
+  //Scenario Outline: User fills in the form incorrectly
 
-//   });
-// });
+  Then("the [Submit] button should be disabled", () => {
+    var disabled = false;
+    var submitButton = screen.getByTestId("submit-button");
+    if (submitButton.disabled == false) disabled = true;
+    expect(disabled).toBe(true);
+  });
+  //   // Scenario: Errors are highlighted red
+  // Then('the following fields should be highlighted in red:', (table) => {
+  //   const errorFields = table.raw().map((row) => row[0]);
 
-// And('an error message should be displayed for the "Country" field', () => {
-//   const errorMessage = screen.getByTestId('Error Message for Country Field'); 
-// });
+  //   errorFields.forEach((field) => {
+  //     const inputField = screen.getByTestId(field);
 
-//   // Scenario: User clears the form
+  //   });
+  // });
 
-// And('the user clicks the [Clear] button', () => {
-//   const clearButton = screen.getByTestId('Clear');
-//   clearButton.click();
-// });
+  // And('an error message should be displayed for the "Country" field', () => {
+  //   const errorMessage = screen.getByTestId('Error Message for Country Field');
+  // });
 
-// Then('all the form fields should be cleared', () => {
-//   const formFields = [
-//     'User',
-//     'Name',
-//     'Surname',
-//     'Country',
-//     'ID'
-//   ];
+  //   // Scenario: User clears the form
 
-//   formFields.forEach((field) => {
-//     const inputField = screen.getByTestId(field);
-//     expect(inputField).toHaveValue('');
-//   });
-// });
-//   // Scenario: User selects a country from the dropdown
-// When('the user selects "SPAIN" from the "Country" dropdown', () => {
-//   const countryDropdown = screen.getByTestId('Country');
+  // And('the user clicks the [Clear] button', () => {
+  //   const clearButton = screen.getByTestId('Clear');
+  //   clearButton.click();
+  // });
 
-//   userEvent.selectOptions(countryDropdown, 'SPAIN');
-// });
+  // Then('all the form fields should be cleared', () => {
+  //   const formFields = [
+  //     'User',
+  //     'Name',
+  //     'Surname',
+  //     'Country',
+  //     'ID'
+  //   ];
 
-// Then('the "Country" field should be filled with "SPAIN"', () => {
-//   const countryField = screen.getByTestId('Country');
+  //   formFields.forEach((field) => {
+  //     const inputField = screen.getByTestId(field);
+  //     expect(inputField).toHaveValue('');
+  //   });
+  // });
+  //   // Scenario: User selects a country from the dropdown
+  // When('the user selects "SPAIN" from the "Country" dropdown', () => {
+  //   const countryDropdown = screen.getByTestId('Country');
 
-//   expect(countryField).toHaveValue('SPAIN');
-// });
+  //   userEvent.selectOptions(countryDropdown, 'SPAIN');
+  // });
 
- }
+  // Then('the "Country" field should be filled with "SPAIN"', () => {
+  //   const countryField = screen.getByTestId('Country');
 
-export default FormProjectSteps
+  //   expect(countryField).toHaveValue('SPAIN');
+  // });
+};
+
+export default FormProjectSteps;

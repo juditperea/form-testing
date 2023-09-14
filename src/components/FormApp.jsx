@@ -1,56 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import '../App.css';
+import React, { useEffect, useState } from "react";
+import "../App.css";
 
 function FormApp() {
-  
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [allUpperCase, setAllUpperCase] = useState(true);
   const [formData, setFormData] = useState({
-    username: '',
-    name: '',
-    surname: '',
-    country: '',
-    id: '',
+    username: "",
+    name: "",
+    surname: "",
+    country: "",
+    id: "",
   });
 
   const clearForm = () => {
     setFormData({
-      username: '',
-      name: '',
-      surname: '',
-      country: '',
-      id: '',
+      username: "",
+      name: "",
+      surname: "",
+      country: "",
+      id: "",
     });
   };
 
-
   const handleInputChange = (event) => {
-  const { name } = event.target;
-  var value = event.target.value.toUpperCase();
-  console.log(name, value);
- setFormData({ ...formData, [name]: value });
-  // Verificar si el valor contiene al menos un carácter en minúscula
+    const { name } = event.target;
+    var value = event.target.value.toUpperCase(); //TODO falta hacer que se vea en la pantalla en mayusculas
+    setFormData({ ...formData, [name]: value });
   };
-
 
   const handleSubmit = (event) => {
-    event.preventDefault()//evita que el submit refresque la pagina
+    event.preventDefault();
 
-    setShowSuccessMessage(true);//poner condicion, si es correcto el formulario
-    //y no hay errores, sera true, si hay errores sera false
+    setShowSuccessMessage(true);
 
-   clearForm()
-
+    clearForm();
   };
 
-
-
-  useEffect ( () => {
-    
-
-
-  }, []);
-
+  useEffect(() => {}, []);
 
   return (
     <div>
@@ -113,12 +99,14 @@ function FormApp() {
         <button type="submit" data-testid="submit-button">
           Submit
         </button>
-        <button type="button"onClick={clearForm} data-testid="clear-button">
+        <button type="button" onClick={clearForm} data-testid="clear-button">
           Clear
         </button>
       </form>
 
-      {showSuccessMessage && <div data-testid="success-message">User created successfully.</div>}
+      {showSuccessMessage && (
+        <div data-testid="success-message">User created successfully.</div>
+      )}
     </div>
   );
 }
