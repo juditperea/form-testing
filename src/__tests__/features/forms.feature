@@ -3,7 +3,7 @@ Feature: Form Project
   Background:
     Given the user opens the app
 
-  @single
+
 
   Scenario: Fields are empty
     Then the "username" field should be empty
@@ -16,24 +16,40 @@ Feature: Form Project
 
     Then the "id" field should be empty
 
+ 
 
-  Scenario: User fills in the form correctly and submits
-    When the user enters the following information:
+  Scenario Outline: User fills in the form correctly
+
+    When the user enters "<username>" on "username"
+    And the user enters "<name>" on "name"
+    And the user enters "<surname>" on "surname"
+    And the user selects "SPAIN" from the "country" dropdown
+    And the user enters "<id>" on "id"
+    Then the [Submit] button should be enabled
+  
+   Examples:
       | username | name | surname | country | id        |
       | JDOE     | JOHN | DOE     | SPAIN   | 49220078D |
-    Then the [Submit] button should be enabled
+
+ Scenario: Success message is shown
+    When the [Submit] button is enabled
     And the user clicks the [Submit] button
-    And a success message should be displayed on the new page with the following text:
+    Then success-message should show the text: "User created successfully."
 
-      """
-      User created successfully.
-      """
-
-# Scenario: User fills in the form incorrectly
-#   When the user enters the following information:
-#     | User   | Name          | Surname  | Country    | ID     |
-#     | JDOE   | John          | Doe      | Spain      | 12345  |
+# Scenario Outline: User fills in the form incorrectly
+    
+#     When the user enters "<username>" on "username"
+#     And the user enters "<name>" on "name"
+#     And the user enters "<surname>" on "surname"
+#     And the user selects "SPAIN" from the "country" dropdown
+#     And the user enters "<id>" on "id"
+#     Then the [Submit] button should be enabled
+#     Examples:
+#     | username     | name          | surname  | country    | id    |
+#     | Johnd0e      | John          | Doe      | SPAIN      | 12345  |
 #   Then the [Submit] button should be disabled
+
+
 
 # Scenario: Errors are highlighted red
 #     When the user enters the following information:
@@ -45,6 +61,8 @@ Feature: Form Project
 #       | Country  |
 #     And an error message should be displayed for the "Country" field
 
+
+
 # Scenario: User clears the form
 #   When the user enters the following information:
 #     | User   | Name    | Surname  | Country    | ID     |
@@ -52,6 +70,8 @@ Feature: Form Project
 #   Then the [Clear] button should be enabled
 #   And the user clicks the [Clear] button
 #   Then all the form fields should be cleared
+
+ 
 
 # Scenario: User selects a country from the dropdown
 #   When the user selects "Spain" from the "Country" dropdown
