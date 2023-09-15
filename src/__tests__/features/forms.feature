@@ -48,7 +48,9 @@ Feature: Form Project
       | username | name | surname | country | id    |
       | Johnd0e  | John | Doe     | SPAIN   | 12345 |
 
-
+Scenario: User selects a country from the dropdown
+  When the user selects the "country-option-spain" on the country dropdown
+  Then the form country is "SPAIN" 
 
 # Scenario: Errors are highlighted red
 #     When the user enters the following information:
@@ -72,6 +74,4 @@ Feature: Form Project
 
 
 
-# Scenario: User selects a country from the dropdown
-#   When the user selects "Spain" from the "Country" dropdown
-#   Then the "Country" field should be filled with "Spain"
+

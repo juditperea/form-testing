@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, userEvent} from "@testing-library/react";
 import "@testing-library/jest-dom";
 import FormApp from "../../components/FormApp";
 
@@ -54,6 +54,15 @@ export const FormProjectSteps = ({
     if (submitButton.disabled == false) disabled = true;
     expect(disabled).toBe(true);
   });
+
+ // Scenario: User selects a country from the dropdown
+When('the user selects the "country-option-spain" on the country dropdown', () => {
+  fireEvent.click(screen.getByTestId('country-option-spain'));
+});
+
+Then('the form country is "SPAIN"', () => {
+  expect(screen.getByTestId('country-option-spain').value).toBe('SPAIN');
+});
   //   // Scenario: Errors are highlighted red
   // Then('the following fields should be highlighted in red:', (table) => {
   //   const errorFields = table.raw().map((row) => row[0]);
@@ -89,18 +98,7 @@ export const FormProjectSteps = ({
   //     expect(inputField).toHaveValue('');
   //   });
   // });
-  //   // Scenario: User selects a country from the dropdown
-  // When('the user selects "SPAIN" from the "Country" dropdown', () => {
-  //   const countryDropdown = screen.getByTestId('Country');
 
-  //   userEvent.selectOptions(countryDropdown, 'SPAIN');
-  // });
-
-  // Then('the "Country" field should be filled with "SPAIN"', () => {
-  //   const countryField = screen.getByTestId('Country');
-
-  //   expect(countryField).toHaveValue('SPAIN');
-  // });
 };
 
 export default FormProjectSteps;
