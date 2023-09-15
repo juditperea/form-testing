@@ -3,7 +3,6 @@ import "../App.css";
 
 function FormApp() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [allUpperCase, setAllUpperCase] = useState(true);
   const [formData, setFormData] = useState({
     username: "",
     name: "",
@@ -12,19 +11,9 @@ function FormApp() {
     id: "",
   });
 
-  const clearForm = () => {
-    setFormData({
-      username: "",
-      name: "",
-      surname: "",
-      country: "",
-      id: "",
-    });
-  };
-
   const handleInputChange = (event) => {
     const { name } = event.target;
-    var value = event.target.value.toUpperCase(); //TODO falta hacer que se vea en la pantalla en mayusculas
+    var value = event.target.value.toUpperCase();
     setFormData({ ...formData, [name]: value });
   };
 
@@ -36,7 +25,26 @@ function FormApp() {
     clearForm();
   };
 
-  useEffect(() => {}, []);
+  const clearForm = () => {
+    // Establece los valores de los campos de entrada en blanco directamente
+    document.getElementsByName("username")[0].value = "";
+    document.getElementsByName("name")[0].value = "";
+    document.getElementsByName("surname")[0].value = "";
+    document.getElementsByName("id")[0].value = "";
+
+    // Restablece el valor del campo de selección a "Select country"
+    const countrySelect = document.getElementById("country");
+    countrySelect.value = "Select country";
+
+    // También puedes limpiar el estado formData si lo deseas
+    setFormData({
+      username: "",
+      name: "",
+      surname: "",
+      country: "",
+      id: "",
+    });
+  };
 
   return (
     <div>
@@ -76,7 +84,7 @@ function FormApp() {
             onChange={handleInputChange}
             data-testid="country"
           >
-            <option value="" data-testid="country-option-empty">
+            <option value="Select country" data-testid="country-option-empty">
               Select country
             </option>
             <option value="SPAIN" data-testid="country-option-spain">

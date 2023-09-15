@@ -63,6 +63,29 @@ When('the user selects the "country-option-spain" on the country dropdown', () =
 Then('the form country is "SPAIN"', () => {
   expect(screen.getByTestId('country-option-spain').value).toBe('SPAIN');
 });
+
+ // Scenario: User clears the form
+When("the user clicks the [Clear] button", () => {
+  fireEvent.click(screen.getByTestId("clear-button"));
+});
+
+Then("all the form fields should be cleared", () => {
+  const usernameField = screen.getByTestId("username");
+  expect(usernameField.value).toBe(""); 
+
+  const nameField = screen.getByTestId("name");
+  expect(nameField.value).toBe("");
+
+  const surnameField = screen.getByTestId("surname"); 
+  expect(surnameField.value).toBe("");
+
+
+});
+
+And("the dropdown should have the \"Select country\" value", () => {
+  const countryDropdown = screen.getByTestId("country-option-empty");
+  expect(countryDropdown.value).toBe("Select country");
+});
   //   // Scenario: Errors are highlighted red
   // Then('the following fields should be highlighted in red:', (table) => {
   //   const errorFields = table.raw().map((row) => row[0]);
@@ -77,27 +100,7 @@ Then('the form country is "SPAIN"', () => {
   //   const errorMessage = screen.getByTestId('Error Message for Country Field');
   // });
 
-  //   // Scenario: User clears the form
-
-  // And('the user clicks the [Clear] button', () => {
-  //   const clearButton = screen.getByTestId('Clear');
-  //   clearButton.click();
-  // });
-
-  // Then('all the form fields should be cleared', () => {
-  //   const formFields = [
-  //     'User',
-  //     'Name',
-  //     'Surname',
-  //     'Country',
-  //     'ID'
-  //   ];
-
-  //   formFields.forEach((field) => {
-  //     const inputField = screen.getByTestId(field);
-  //     expect(inputField).toHaveValue('');
-  //   });
-  // });
+ 
 
 };
 
