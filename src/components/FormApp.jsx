@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
+import IDValidation from "./IDValidation";
 
 function FormApp() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -11,11 +12,16 @@ function FormApp() {
     country: "Select country",
     id: "",
   });
- 
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     var upperCaseValue = value.toUpperCase();
-    setFormData({ ...formData, [name]: upperCaseValue });
+    if (name === "id") {
+      setFormData({ ...formData, [name]: upperCaseValue });
+      validateID(upperCaseValue);
+    } else {
+      setFormData({ ...formData, [name]: upperCaseValue });
+    }
   };
 
   const handleSubmit = (event) => {
@@ -23,6 +29,7 @@ function FormApp() {
 
     if (!isSubmitDisabled) {
       setShowSuccessMessage(true);
+
       clearForm();
     }
   };
@@ -91,20 +98,14 @@ function FormApp() {
             onChange={handleInputChange}
             data-testid="country"
           >
-            <option value="Select country" data-testid="country-option-empty" className="nooption">Select country </option>
+            <option value="Select country" data-testid="country-option-empty" className="nooption">Select country</option>
             <option value="SPAIN" data-testid="country-option-spain">SPAIN</option>
-            <option value="ARGENTINA" data-testid="country-option-argentina">ARGENTINA</option>
+            <option value="COLOMBIA" data-testid="country-option-colombia">COLOMBIA</option>
           </select>
         </div>
         <div>
           <p>ID</p>
-          <input
-            type="text"
-            name="id"
-            value={formData.id}
-            onChange={handleInputChange}
-            data-testid="id"
-          />
+          <IDValidation id={formData.id} onIdChange={(newId) => setFormData({ ...formData, id: newId })} />
         </div>
         <button
           type="submit"

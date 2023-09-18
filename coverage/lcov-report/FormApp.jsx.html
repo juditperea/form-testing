@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>21/28</span>
+                <span class='fraction'>22/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.5% </span>
+                <span class="strong">30% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/8</span>
+                <span class='fraction'>3/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/5</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">74.07% </span>
+                <span class="strong">65.62% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>20/27</span>
+                <span class='fraction'>21/32</span>
             </div>
         
             
@@ -202,6 +202,7 @@
 <a name='L137'></a><a href='#L137'>137</a>
 <a name='L138'></a><a href='#L138'>138</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
@@ -218,6 +219,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
@@ -225,6 +231,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,7 +256,6 @@
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -301,13 +307,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -339,6 +339,7 @@
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from "react";
 import "../App.css";
+import IDValidation from "./IDValidation";
 &nbsp;
 function FormApp() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -350,11 +351,16 @@ function FormApp() {
     country: "Select country",
     id: "",
   });
- 
+&nbsp;
   const handleInputChange = <span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; {
     const { name, value } = <span class="cstat-no" title="statement not covered" >event.target;</span>
     var upperCaseValue = <span class="cstat-no" title="statement not covered" >value.toUpperCase();</span>
-<span class="cstat-no" title="statement not covered" >    setFormData({ ...formData, [name]: upperCaseValue });</span>
+<span class="cstat-no" title="statement not covered" >    if (name === "id") {</span>
+<span class="cstat-no" title="statement not covered" >      setFormData({ ...formData, [name]: upperCaseValue });</span>
+<span class="cstat-no" title="statement not covered" >      validateID(upperCaseValue);</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      setFormData({ ...formData, [name]: upperCaseValue });</span>
+    }
   };
 &nbsp;
   const handleSubmit = <span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; {
@@ -362,6 +368,7 @@ function FormApp() {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!isSubmitDisabled) {</span>
 <span class="cstat-no" title="statement not covered" >      setShowSuccessMessage(true);</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      clearForm();</span>
     }
   };
@@ -386,7 +393,6 @@ function FormApp() {
     const isCountryValid = country !== "Select country";
     const isIdValid = id !== "";
 &nbsp;
-    // Verifica que todos los campos requeridos estén completos antes de habilitar el botón de envío
     setIsSubmitDisabled(!(isUsernameValid &amp;&amp; isNameValid &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >isSurnameValid &amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >i</span>sCountryValid &amp;&amp; <span class="branch-4 cbranch-no" title="branch not covered" >i</span>sIdValid</span>));
   }, [formData]);
 &nbsp;
@@ -431,20 +437,14 @@ function FormApp() {
             onChange={handleInputChange}
             data-testid="country"
           &gt;
-            &lt;option value="Select country" data-testid="country-option-empty" className="nooption"&gt;Select country &lt;/option&gt;
+            &lt;option value="Select country" data-testid="country-option-empty" className="nooption"&gt;Select country&lt;/option&gt;
             &lt;option value="SPAIN" data-testid="country-option-spain"&gt;SPAIN&lt;/option&gt;
-            &lt;option value="ARGENTINA" data-testid="country-option-argentina"&gt;ARGENTINA&lt;/option&gt;
+            &lt;option value="COLOMBIA" data-testid="country-option-colombia"&gt;COLOMBIA&lt;/option&gt;
           &lt;/select&gt;
         &lt;/div&gt;
         &lt;div&gt;
           &lt;p&gt;ID&lt;/p&gt;
-          &lt;input
-            type="text"
-            name="id"
-            value={formData.id}
-            onChange={handleInputChange}
-            data-testid="id"
-          /&gt;
+          &lt;IDValidation id={formData.id} onIdChange={<span class="fstat-no" title="function not covered" >(n</span>ewId) =&gt; <span class="cstat-no" title="statement not covered" >setFormData({ ...formData, id: newId })} /&gt;</span>
         &lt;/div&gt;
         &lt;button
           type="submit"
@@ -481,7 +481,7 @@ export default FormApp;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-09-18T09:13:02.794Z
+                at 2023-09-18T13:09:42.556Z
             </div>
         <script src="prettify.js"></script>
         <script>
