@@ -31,13 +31,13 @@ export const FormProjectSteps = ({
   });
 
   Then("the [Submit] button should be enabled", () => {
-    expect(screen.getByTestId("submit-button")).toBeEnabled();
+    expect(screen.getByTestId("submit-button")).not.toBeDisabled;
   });
 
   //Scenario: Success message is shown
 
   When("the [Submit] button is enabled", () => {
-    expect(screen.getByTestId("submit-button")).toBeEnabled();
+    expect(screen.getByTestId("submit-button")).not.toBeDisabled
   });
 
   When("the user clicks the [Submit] button", () => {
@@ -49,10 +49,8 @@ export const FormProjectSteps = ({
   //Scenario Outline: User fills in the form incorrectly
 
   Then("the [Submit] button should be disabled", () => {
-    var disabled = false;
-    var submitButton = screen.getByTestId("submit-button");
-    if (submitButton.disabled == false) disabled = true;
-    expect(disabled).toBe(true);
+    const submitButton = screen.getByTestId("submit-button");
+    expect(submitButton).toBeDisabled();
   });
 
  // Scenario: User selects a country from the dropdown

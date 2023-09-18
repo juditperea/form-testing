@@ -3,57 +3,62 @@ import "../App.css";
 
 function FormApp() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [formData, setFormData] = useState({
     username: "",
     name: "",
     surname: "",
-    country: "",
+    country: "Select country",
     id: "",
   });
-
+ 
   const handleInputChange = (event) => {
-    const { name } = event.target;
-    var value = event.target.value.toUpperCase();
-    setFormData({ ...formData, [name]: value });
+    const { name, value } = event.target;
+    var upperCaseValue = value.toUpperCase();
+    setFormData({ ...formData, [name]: upperCaseValue });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    setShowSuccessMessage(true);
-
-    clearForm();
+    if (!isSubmitDisabled) {
+      setShowSuccessMessage(true);
+      clearForm();
+    }
   };
 
   const clearForm = () => {
-    // Establece los valores de los campos de entrada en blanco directamente
-    document.getElementsByName("username")[0].value = "";
-    document.getElementsByName("name")[0].value = "";
-    document.getElementsByName("surname")[0].value = "";
-    document.getElementsByName("id")[0].value = "";
-
-    // Restablece el valor del campo de selección a "Select country"
-    const countrySelect = document.getElementById("country");
-    countrySelect.value = "Select country";
-
-    // También puedes limpiar el estado formData si lo deseas
     setFormData({
       username: "",
       name: "",
       surname: "",
-      country: "",
+      country: "Select country",
       id: "",
     });
+
+    setIsSubmitDisabled(true);
   };
 
+  useEffect(() => {
+    const { username, name, surname, country, id } = formData;
+    const isUsernameValid = username.length <= 10;
+    const isNameValid = name !== "";
+    const isSurnameValid = surname !== "";
+    const isCountryValid = country !== "Select country";
+    const isIdValid = id !== "";
+
+    setIsSubmitDisabled(!(isUsernameValid && isNameValid && isSurnameValid && isCountryValid && isIdValid));
+  }, [formData]);
+
   return (
-    <div>
+    <div className="mt-4 p-4">
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="my-4">
           <p>Username</p>
           <input
             type="text"
             name="username"
+            value={formData.username}
             onChange={handleInputChange}
             data-testid="username"
           />
@@ -63,6 +68,7 @@ function FormApp() {
           <input
             type="text"
             name="name"
+            value={formData.name}
             onChange={handleInputChange}
             data-testid="name"
           />
@@ -72,6 +78,7 @@ function FormApp() {
           <input
             type="text"
             name="surname"
+            value={formData.surname}
             onChange={handleInputChange}
             data-testid="surname"
           />
@@ -79,20 +86,14 @@ function FormApp() {
         <div>
           <p>Country</p>
           <select
-            id="country"
             name="country"
+            value={formData.country}
             onChange={handleInputChange}
             data-testid="country"
           >
-            <option value="Select country" data-testid="country-option-empty">
-              Select country
-            </option>
-            <option value="SPAIN" data-testid="country-option-spain">
-              SPAIN
-            </option>
-            <option value="ARGENTINA" data-testid="country-option-argentina">
-              ARGENTINA
-            </option>
+            <option value="Select country" data-testid="country-option-empty" className="nooption">Select country </option>
+            <option value="SPAIN" data-testid="country-option-spain">SPAIN</option>
+            <option value="ARGENTINA" data-testid="country-option-argentina">ARGENTINA</option>
           </select>
         </div>
         <div>
@@ -100,20 +101,33 @@ function FormApp() {
           <input
             type="text"
             name="id"
+            value={formData.id}
             onChange={handleInputChange}
             data-testid="id"
           />
         </div>
-        <button type="submit" data-testid="submit-button">
+        <button
+          type="submit"
+          data-testid="submit-button"
+          disabled={isSubmitDisabled}
+          className="submit"
+        >
           Submit
         </button>
-        <button type="button" onClick={clearForm} data-testid="clear-button">
+        <button
+          type="button"
+          onClick={clearForm}
+          data-testid="clear-button"
+          className="clear"
+        >
           Clear
         </button>
       </form>
 
       {showSuccessMessage && (
-        <div data-testid="success-message">User created successfully.</div>
+        <div data-testid="success-message" className="message">
+          ✔ User created successfully.
+        </div>
       )}
     </div>
   );

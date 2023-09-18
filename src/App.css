@@ -40,3 +40,24 @@
 .read-the-docs {
   color: #888;
 }
+
+.message {
+    color: #62ff1a;
+    margin-top: 16px;
+  }
+
+.submit {
+color: #2559f4;
+margin-top: 16px;
+margin-right: 16px;
+}
+
+.clear {
+color: #ec4747;
+margin-top: 16px;
+}
+
+.nooption{
+    color: #5e5a5a;
+    }
+    

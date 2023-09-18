@@ -45,8 +45,8 @@ Feature: Form Project
     And the user enters "<id>" on "id"
     Then the [Submit] button should be disabled
     Examples:
-      | username | name | surname | country | id    |
-      | Johnd0e  | John | Doe     | SPAIN   | 12345 |
+      | username     | name | surname | country | id    |
+      | Johnd0e1997  | John | Doe     | SPAIN   | 12345 |
 
   Scenario: User selects a country from the dropdown
     When the user selects the "country-option-spain" on the country dropdown
