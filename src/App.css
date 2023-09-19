@@ -42,22 +42,32 @@
 }
 
 .message {
-    color: #62ff1a;
+    color: #55fb46;
     margin-top: 16px;
   }
-
-.submit {
-color: #2559f4;
-margin-top: 16px;
-margin-right: 16px;
+.message-error {
+  color: #e60f0f;
+  margin-top: 16px;
+}
+.submit:hover {
+  filter: drop-shadow(0 0 1em #646cffaa);
 }
 
+.submit {
+  color: #2559f4;
+  margin-top: 16px;
+  margin-right: 16px;
+  }
 .clear {
 color: #ec4747;
 margin-top: 16px;
 }
+.clear:hover {
+  filter: drop-shadow(0 0 1em #ec4747);
+  }
+  
 
 .nooption{
     color: #5e5a5a;
     }
-    
+

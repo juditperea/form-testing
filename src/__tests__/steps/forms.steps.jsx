@@ -58,8 +58,8 @@ When('the user selects the "country-option-spain" on the country dropdown', () =
   fireEvent.click(screen.getByTestId('country-option-spain'));
 });
 
-Then('the form country is "SPAIN"', () => {
-  expect(screen.getByTestId('country-option-spain').value).toBe('SPAIN');
+Then('the form country is "ESPAÑA"', () => {
+  expect(screen.getByTestId('country-option-spain').value).toBe('ESPAÑA');
 });
 
  // Scenario: User clears the form
