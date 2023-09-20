@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent, userEvent} from "@testing-library/react";
+import { render, screen, fireEvent, userEvent, waitFor} from "@testing-library/react";
 import "@testing-library/jest-dom";
 import FormApp from "../../components/FormApp";
 
@@ -20,7 +20,7 @@ export const FormProjectSteps = ({
 
   //Scenario Outline: User fills in the form correctly
 
-  When(/^the user enters (.*) on "(.*)"$/, (arg0, arg1) => {
+  When(/^the user enters "(.*)" on "(.*)"$/, (arg0, arg1) => {
     fireEvent.change(screen.getByTestId(arg1), arg0, {
       target: { value: arg0 },
     });
@@ -36,15 +36,22 @@ export const FormProjectSteps = ({
 
   //Scenario: Success message is shown
 
-  When("the [Submit] button is enabled", () => {
-    expect(screen.getByTestId("submit-button")).not.toBeDisabled
-  });
+  // When("the [Submit] button is enabled", () => {
+  //   expect(screen.getByTestId("submit-button")).not.toBeDisabled
+  // });
 
-  When("the user clicks the [Submit] button", () => {
-    fireEvent.click(screen.getByTestId("submit-button"));
-  });
+  // When("the user clicks the [Submit] button", () => {
+  //   fireEvent.click(screen.getByTestId("submit-button"));
+  // });
 
-  Then(/^success-message should show the text: "(.*)"$/, (arg0) => {});
+  // Then(/^success-message should show the text: "(.*)"$/, async(arg0) => {
+  //   let message = screen.getByTestId("success-message").textContent
+  //   await waitFor(() => {
+  //     expect(screen.getByTestId('success-message')).toBeInTheDocument()
+  //   });
+  
+  //  expect(screen.getByTestId('success-message')).toHaveTextContent('✔ User created successfully.')
+  // });
 
   //Scenario Outline: User fills in the form incorrectly
 
@@ -84,22 +91,15 @@ And("the dropdown should have the \"Select country\" value", () => {
   const countryDropdown = screen.getByTestId("country-option-empty");
   expect(countryDropdown.value).toBe("Select country");
 });
-  //   // Scenario: Errors are highlighted red
-  // Then('the following fields should be highlighted in red:', (table) => {
-  //   const errorFields = table.raw().map((row) => row[0]);
-
-  //   errorFields.forEach((field) => {
-  //     const inputField = screen.getByTestId(field);
-
-  //   });
-  // });
-
-  // And('an error message should be displayed for the "Country" field', () => {
-  //   const errorMessage = screen.getByTestId('Error Message for Country Field');
-  // });
-
- 
-
-};
-
+    // Scenario: Username longer than 10 characters
+Then(/^the maximum number of characters should be (\d+)$/, async (maxLength) => {
+  const input = screen.getByTestId("username");
+  const maxCharactersAsNumber = parseInt(maxLength); 
+  await waitFor(() => {
+      const maxLength = input.maxLength;
+      expect(input.value).toBe(maxCharactersAsNumber);
+  });
+  
+    });
+}
 export default FormProjectSteps;
