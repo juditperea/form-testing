@@ -1,198 +1,136 @@
-import React, { useEffect, useState } from 'react'
-import '../App.css'
+import React, { useEffect, useState } from "react";
+import "../App.css";
 
-function FormApp () {
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true)
-  const [isIdValid, setIsIdValid] = useState(false)
-  const [isUsernameValid, setIsUsernameValid] = useState(false)
-  const [clicked, setClicked] = useState(false)
+function FormApp() {
+  const MAX_USERNAME_LENGTH = 10;
+  const [usernameAlert, setUsernameAlert] = useState("");
+  const [idAlert, setIdAlert] = useState("");
   const [formData, setFormData] = useState({
-    username: '',
-    name: '',
-    surname: '',
-    country: 'Select country',
-    id: ''
-  })
-  //useEffect de name
+    username: "",
+    name: "",
+    surname: "",
+    country: "Select country",
+    id: "", 
+  });
+
+  function validateIDByCountry(id, country) {
+    if (country === "SPAIN") {
+      if (id.length !== 9) {
+        return false;
+      }
+
+      const VALID_LETTERS = "TRWAGMYFPDXBNJZSQVHLCKE";
+      const ID_NUMBER = id.substring(0, 8);
+      const ID_LETTER = id.charAt(8).toUpperCase();
+
+      if (!/^\d+$/.test(ID_NUMBER)) {
+        return false;
+      }
+
+      const calculatedLetter = VALID_LETTERS[ID_NUMBER % 23];
+
+      return ID_LETTER === calculatedLetter;
+    } else if (country === "COLOMBIA") {
+      
+      return /^\d{10}$/.test(id);
+    }
+  }
+
+  function validateID(id, country) {
+    if (country === "SPAIN") {
+      if (!validateIDByCountry(id, country)) {
+        setIdAlert("Enter a valid ID for Spain");
+      } else {
+        setIdAlert("");
+      }
+    } else if (country === "COLOMBIA") {
+      if (!validateIDByCountry(id, country)) {
+        setIdAlert("Enter a valid ID for Colombia");
+      } else {
+        setIdAlert(""); 
+      }
+    }
+  }
+
+  function validateUsernameLength(username) {
+    return username.length <= MAX_USERNAME_LENGTH;
+  }
+
+  function validateUsername(username) {
+    if (!validateUsernameLength(username)) {
+      setUsernameAlert("Username must be 10 or less characters");
+    } else {
+      setUsernameAlert("");
+    }
+  }
 
   useEffect(() => {
-    const { username, name, surname, country, id } = formData
-    const isUsernameValid = username.length <= 10 && !username.includes(name)
-    const isNameValid = name !== ''
-    const isSurnameValid = surname !== ''
-    const isCountryValid = country !== 'Select country'
-    const isIdValid = validateID(formData.id.toUpperCase())
+    validateUsername(formData.username);
+    validateID(formData.id, formData.country);
+    return () => {
+      setUsernameAlert("");
+      setIdAlert("");
+    };
+  }, [formData.username, formData.id, formData.country]);
 
-    setIsSubmitDisabled(
-      !(
-        isUsernameValid &&
-        isNameValid &&
-        isSurnameValid &&
-        isCountryValid &&
-        isIdValid
-      )
-    )
-  }, [formData, isIdValid, showSuccessMessage])
-  //meter aqui el handke submit
-  const handleInputChange = event => {
-    const { name, value } = event.target
-    var upperCaseValue = value.toUpperCase()
-    if (name === 'id') {
-      setFormData({ ...formData, [name]: upperCaseValue })
-      validateID(upperCaseValue)
-    } else {
-      setFormData({ ...formData, [name]: upperCaseValue })
-    }
-  }
-
-  const handleId = event => {
-    //useeffect
-
-    const newId = event.target.value
-
-    const isIdValid = validateID(newId)
-
-    setIsIdValid(isIdValid)
-    setFormData({
-      ...formData,
-      id: newId
-    })
-    if (!isIdValid) {
-      setClicked(true)
-    }
-  }
-  const handleUsername = event => {
-    const User = event.target.value.toUpperCase()
-    const isUsernameValid = User.includes(formData.name) && formData.name !== ''
-    console.log(isUsernameValid)
-    setIsUsernameValid(isUsernameValid)
-
-    setFormData({
-      ...formData,
-      username: User
-    })
-  }
-
-  const handleSubmit = event => {
-    event.preventDefault()
-
-    if (!isSubmitDisabled) {
-      setShowSuccessMessage(true)
-      setTimeout(() => setShowSuccessMessage(false), 3000)
-      setClicked(true)
-      clearForm()
-    }
-  }
-
-  const clearForm = () => {
-    setFormData({
-      username: '',
-      name: '',
-      surname: '',
-      country: 'Select country',
-      id: ''
-    })
-
-    setIsSubmitDisabled(true)
-  }
-
-  const validateID = id => {
-    const { country } = formData
-
-    if (country === 'ESPAÑA') {
-      const validLetters = 'TRWAGMYFPDXBNJZSQVHLCKE'
-      const number = parseInt(id, 10)
-      const letter = id.slice(-1).toUpperCase()
-
-      if (id.length !== 9 || isNaN(number)) {
-        setIsIdValid(false)
-        return false
-      }
-
-      const calculatedLetter = validLetters[number % 23]
-      setIsIdValid(letter === calculatedLetter)
-      return isIdValid
-    } else if (country === 'COLOMBIA') {
-      let sum = 0
-      let digit
-      id = id.replace(/\s/g, '').replace(/-/g, '')
-      id = id.split('').reverse().join('')
-      for (let i = 0; i < id.length; i++) {
-        digit = parseInt(id.charAt(i))
-
-        if (i % 2 !== 0) {
-          digit *= 2
-          if (digit >= 10) {
-            digit -= 9
-          }
-        }
-        sum += digit
-        return sum % 10 === 0
-      }
-
-      return isIdValid
-    }
-  }
+  const handleIDChange = (e) => {
+    const newID = e.target.value;
+    setFormData({ ...formData, id: newID });
+  };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div>
           <p>Username</p>
+          <p>{usernameAlert}</p>
           <input
-            type='text'
-            maxLength={10}
-            name='username'
+            type="text"
             value={formData.username}
-            onChange={handleUsername}
-            data-testid='username'
+            onChange={(e) =>
+              setFormData({ ...formData, username: e.target.value.toUpperCase() })
+            }
+            data-testid="username"
           />
-          {formData.username.includes(formData.name) && (
-            <div className='message-error'>
-              The name can't be included in the username
-            </div>
-          )}
         </div>
         <div>
           <p>Name</p>
           <input
-            type='text'
-            name='name'
-            value={formData.name}
-            onChange={handleInputChange}
-            data-testid='name'
+            type="text"
+            value={formData.firstname}
+            onChange={(e) =>
+              setFormData({ ...formData, firstname: e.target.value.toUpperCase() })
+            }
+            data-testid="firstname"
           />
         </div>
         <div>
           <p>Surname</p>
           <input
-            type='text'
-            name='surname'
+            type="text"
             value={formData.surname}
-            onChange={handleInputChange}
-            data-testid='surname'
+            onChange={(e) =>
+              setFormData({ ...formData, surname: e.target.value.toUpperCase() })
+            }
+            data-testid="surname"
           />
         </div>
         <div>
           <p>Country</p>
           <select
-            name='country'
             value={formData.country}
-            onChange={handleInputChange}
-            data-testid='country'
+            onChange={(e) =>
+              setFormData({ ...formData, country: e.target.value.toUpperCase() })
+            }
+            data-testid="country"
           >
-            <option
-              value='Select country'
-              data-testid='country-option-empty'
-              className='nooption'
-            >
+            <option value="Select country" data-testid="country-option-empty">
               Select country
             </option>
-            <option value='ESPAÑA' data-testid='country-option-spain'>
-              ESPAÑA
+            <option value="SPAIN" data-testid="spain">
+              SPAIN
             </option>
-            <option value='COLOMBIA' data-testid='country-option-colombia'>
+            <option value="COLOMBIA" data-testid="colombia">
               COLOMBIA
             </option>
           </select>
@@ -200,40 +138,16 @@ function FormApp () {
         <div>
           <p>ID</p>
           <input
-            type='text'
-            name='id'
-            data-testid='id'
+            type="text"
             value={formData.id.toUpperCase()}
-            onChange={handleId}
+            onChange={handleIDChange}
+            data-testid="id"
           />
-          {clicked && (
-            <div className={`message-error ${isIdValid ? 'valid' : 'invalid'}`}>
-              {isIdValid ? '' : 'Please enter a valid ID'}
-            </div>
-          )}
+          <p>{idAlert}</p>
         </div>
-        <button
-          type='submit'
-          data-testid='submit-button'
-          disabled={isSubmitDisabled}
-          className='submit'
-        >
-          Submit
-        </button>
-        <button
-          type='button'
-          onClick={clearForm}
-          data-testid='clear-button'
-          className='clear'
-        >
-          Clear
-        </button>
       </form>
-      <div data-testid='success-message' className='message'>
-        {showSuccessMessage && '✔ User created successfully.'}
-      </div>
     </div>
-  )
+  );
 }
 
-export default FormApp
+export default FormApp;
