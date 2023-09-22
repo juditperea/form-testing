@@ -4,6 +4,8 @@ import "../App.css";
 function FormApp() {
   const MAX_USERNAME_LENGTH = 10;
   const [usernameAlert, setUsernameAlert] = useState("");
+  const [isFormValid, setIsFormValid] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [idAlert, setIdAlert] = useState("");
   const [formData, setFormData] = useState({
     username: "",
@@ -12,29 +14,44 @@ function FormApp() {
     country: "Select country",
     id: "", 
   });
-
+  const clearForm = () => {
+    setFormData({
+      username: "",
+      name: "",
+      surname: "",
+      country: "Select country",
+      id: "",
+    });
+  };
+  const [errorFields, setErrorFields] = useState({
+    username: false,
+    name: false,
+    surname: false,
+    country: false,
+    id: false,
+  });
   function validateIDByCountry(id, country) {
-    if (country === "SPAIN") {
-      if (id.length !== 9) {
-        return false;
-      }
+  const VALID_LETTERS = "TRWAGMYFPDXBNJZSQVHLCKE";
+  const ID_NUMBER = id.substring(0, id.length - 1);
+  const ID_LETTER = id.charAt(id.length - 1).toUpperCase();
+  const calculatedLetter = VALID_LETTERS[ID_NUMBER % 23];
 
-      const VALID_LETTERS = "TRWAGMYFPDXBNJZSQVHLCKE";
-      const ID_NUMBER = id.substring(0, 8);
-      const ID_LETTER = id.charAt(8).toUpperCase();
-
-      if (!/^\d+$/.test(ID_NUMBER)) {
-        return false;
-      }
-
-      const calculatedLetter = VALID_LETTERS[ID_NUMBER % 23];
-
-      return ID_LETTER === calculatedLetter;
-    } else if (country === "COLOMBIA") {
-      
-      return /^\d{10}$/.test(id);
+  if (country === "SPAIN") {
+    if (id.length !== 9) {
+      return false;
     }
+    if (!/^\d+$/.test(ID_NUMBER)) {
+      return false;
+    }
+    return ID_LETTER === calculatedLetter;
+  } else if (country === "ARGENTINA") {
+    if (!(id.length === 7 || id.length === 8) || !/^\d+$/.test(ID_NUMBER)) {
+      return false;
+    }
+    return ID_LETTER === calculatedLetter;
   }
+}
+
 
   function validateID(id, country) {
     if (country === "SPAIN") {
@@ -43,9 +60,9 @@ function FormApp() {
       } else {
         setIdAlert("");
       }
-    } else if (country === "COLOMBIA") {
+    } else if (country === "ARGENTINA") {
       if (!validateIDByCountry(id, country)) {
-        setIdAlert("Enter a valid ID for Colombia");
+        setIdAlert("Enter a valid ID for Argentina");
       } else {
         setIdAlert(""); 
       }
@@ -57,13 +74,40 @@ function FormApp() {
   }
 
   function validateUsername(username) {
+    const isFirstNameInUsername = username.includes(formData.name) && formData.name != "";
     if (!validateUsernameLength(username)) {
       setUsernameAlert("Username must be 10 or less characters");
-    } else {
+    } else if (isFirstNameInUsername) {
+      setUsernameAlert("Username cannot include the name");
+    }else {
       setUsernameAlert("");
     }
   }
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  
+    const newErrorFields = {
+      username: !formData.username,
+      name: !formData.name,
+      surname: !formData.surname,
+      country: formData.country === "Select country",
+      id: !formData.id || !validateID(formData.id, formData.country),
+    };
+  
+    setErrorFields(newErrorFields);
+  
+    if (Object.values(newErrorFields).every((field) => !field)) {
+      setSuccessMessage("User created successfully");
+      // setTimeout(() => {
+      //   setSuccessMessage("");
+      // }, 3000);
+    } else {
+      setIsFormValid(false);
+      setSuccessMessage("");
+    }
+  };
+  
+  
   useEffect(() => {
     validateUsername(formData.username);
     validateID(formData.id, formData.country);
@@ -71,7 +115,7 @@ function FormApp() {
       setUsernameAlert("");
       setIdAlert("");
     };
-  }, [formData.username, formData.id, formData.country]);
+  }, [formData.username, formData.id, formData.country,formData.name]);
 
   const handleIDChange = (e) => {
     const newID = e.target.value;
@@ -83,12 +127,12 @@ function FormApp() {
       <form>
         <div>
           <p>Username</p>
-          <p>{usernameAlert}</p>
+          <p className="message-error">{usernameAlert}</p>
           <input
             type="text"
             value={formData.username}
             onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value.toUpperCase() })
+              setFormData({ ...formData, username: e.target.value.toUpperCase()  })
             }
             data-testid="username"
           />
@@ -97,9 +141,9 @@ function FormApp() {
           <p>Name</p>
           <input
             type="text"
-            value={formData.firstname}
+            value={formData.name}
             onChange={(e) =>
-              setFormData({ ...formData, firstname: e.target.value.toUpperCase() })
+              setFormData({ ...formData, name: e.target.value.toUpperCase()  })
             }
             data-testid="firstname"
           />
@@ -110,7 +154,7 @@ function FormApp() {
             type="text"
             value={formData.surname}
             onChange={(e) =>
-              setFormData({ ...formData, surname: e.target.value.toUpperCase() })
+              setFormData({ ...formData, surname: e.target.value.toUpperCase()  })
             }
             data-testid="surname"
           />
@@ -130,8 +174,8 @@ function FormApp() {
             <option value="SPAIN" data-testid="spain">
               SPAIN
             </option>
-            <option value="COLOMBIA" data-testid="colombia">
-              COLOMBIA
+            <option value="ARGENTINA" data-testid="argentina">
+              ARGENTINA
             </option>
           </select>
         </div>
@@ -139,12 +183,30 @@ function FormApp() {
           <p>ID</p>
           <input
             type="text"
-            value={formData.id.toUpperCase()}
+            value={formData.id.toUpperCase() }
             onChange={handleIDChange}
             data-testid="id"
           />
-          <p>{idAlert}</p>
+          <p className="message-error">{idAlert}</p>
         </div>
+        <button
+          type="submit"
+          data-testid="submit-button"
+          className="submit"
+          onClick={handleSubmit}
+        >
+          Submit
+        </button>
+        {successMessage && <div className="success-message" data-testid="success-message">{successMessage}</div>}
+        
+        <button
+          type="button"
+          onClick={clearForm}
+          data-testid="clear-button"
+          className="clear"
+        >
+          Clear
+        </button>
       </form>
     </div>
   );

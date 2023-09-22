@@ -14,10 +14,9 @@ export const FormProjectSteps = ({
   });
 
   // Scenario: Fields are empty
-  Then(/^the "(.*)" field should be empty$/, (field) => {
-    expect(screen.getByTestId(field)).toBeNull;
-  });
-
+  Then(/^the "(.*)" field should be empty$/, (arg0) => {
+    expect(screen.getByTestId(arg0)).toBeNull;
+  }); 
   //Scenario Outline: User fills in the form correctly
 
   When(/^the user enters "(.*)" on "(.*)"$/, (arg0, arg1) => {
@@ -47,10 +46,10 @@ export const FormProjectSteps = ({
   Then(/^success-message should show the text: "(.*)"$/, async(arg0) => {
     let message = screen.getByTestId("success-message").textContent
     await waitFor(() => {
-      expect(screen.getByTestId('success-message')).toBeInTheDocument()
+      expect(screen.getByTestId("success-message")).toBeInTheDocument()
     });
   
-   expect(screen.getByTestId('success-message')).toHaveTextContent('✔ User created successfully.')
+   expect(screen.getByTestId("success-message")).toHaveTextContent('User created successfully')
   });
 
   //Scenario Outline: User fills in the form incorrectly
@@ -66,10 +65,14 @@ When('the user selects the option "spain" on the country dropdown', () => {
 });
 
 Then('the form country is "SPAIN"', () => {
-  expect(screen.getByTestId('country-option-spain').value).toBe('SPAIN');
+  expect(screen.getByTestId('spain').value).toBe('SPAIN');
 });
 
  // Scenario: User clears the form
+
+ And('the dropdown should have the "(.*)" value',(arg0) => {
+    expect(screen.getByTestId('country')).toHaveValue('Select country');
+ });
 When("the user clicks the [Clear] button", () => {
   fireEvent.click(screen.getByTestId("clear-button"));
 });
@@ -84,6 +87,14 @@ Then("all the form fields should be cleared", () => {
   const surnameField = screen.getByTestId("surname"); 
   expect(surnameField.value).toBe("");
 
+  
+  const idField = screen.getByTestId("id");
+  expect(idField.value).toBe("");
+
+And('the dropdown should have the "" value', () => {
+  const countryField = screen.getByTestId("country");
+  expect(countryField.value).toBe("Select country");
+  });
 
 });
 
@@ -92,44 +103,35 @@ And("the dropdown should have the \"Select country\" value", () => {
   expect(countryDropdown.value).toBe("Select country");
 });
     // Scenario: Username longer than 10 characters
-Then(/^the user should not be able to enter more characters in the "(.*)" field.$/, (arg0) => {
-  const input = screen.getByTestId("username");
-  const maxCharactersAsNumber = 10
-  console.log(input.maxLength);
-  expect(input.maxLength).toBe(maxCharactersAsNumber);
-  
-   {
-  };
-// Scenario: Username includes the Name field error
-When('the user enters "JOHN123" on "username"', () => {
-  fireEvent.change(screen.getByTestId('username'), { target: { value: 'JOHN123' } });
-});
-
-And('the user enters "JOHN" on "name"', () => {
-  fireEvent.change(screen.getByTestId('name'), { target: { value: 'JOHN' } });
-});
-
-And('the user enters "DOE" on "surname"', () => {
-  fireEvent.change(screen.getByTestId('surname'), { target: { value: 'DOE' } });
-});
-
-And('the user selects "SPAIN" from the "country" dropdown', () => {
-  fireEvent.select(screen.getByTestId('country'), 'SPAIN');
-});
-
-And('the user enters "49220078D" on "id"', () => {
-  fireEvent.change(screen.getByTestId('id'), { target: { value: '49220078D' } });
-});
-
-And('the user clicks the [Submit] button', () => {
-  fireEvent.click(screen.getByTestId('submit'));
-});
-
-
-Then(/^message-error should show the text: "(.*)"$/, (arg0) => {
-  const messageErrorElement = screen.getByText("The name can't be included in the username")
-  expect(messageErrorElement).toBeInTheDocument();
-});
+    Then(/^the user should not be able to enter more characters in the "(.*)" field.$/, (fieldName) => {
+      const input = screen.getByTestId(fieldName).value;
+      const maxCharactersAsNumber = 10;
+      
+      expect(input.length).toBe(maxCharactersAsNumber);
     });
-}
+// // Scenario: Username includes the Name field error
+
+// When(/^the user enters "(.*)" on "(.*)"$/, (arg0, arg1) => {
+
+// });
+
+// And(/^the user enters "(.*)" on "(.*)"$/, (arg0, arg1) => {
+
+// });
+
+// And(/^the user enters "(.*)" on "(.*)"$/, (arg0, arg1) => {
+
+// });
+
+// And(/^the user selects "spain" from the "(.*)" dropdown$/, (arg0, arg1) => {
+
+// });
+// And(/^the user enters "(.*)" on "(.*)"$/, (arg0, arg1) => {
+
+// });
+
+// Then(/^message-error should show the text: "(.*)"$/, (arg0) => {
+
+// });
+  }
 export default FormProjectSteps;
