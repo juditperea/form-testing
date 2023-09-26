@@ -66,7 +66,11 @@ margin-top: 16px;
 .clear:hover {
   filter: drop-shadow(0 0 1em #ec4747);
   }
-  
+.buttondiv{
+  display: flex;  
+  flex-direction: row;
+  gap: 0;
+}
 
 .nooption{
     color: #5e5a5a;
@@ -74,5 +78,5 @@ margin-top: 16px;
 
     .error-field {
       border: 1px solid red;
-      background-color: rgba(255, 0, 0, 0.1); /* Color de fondo rojo con transparencia */
+      background-color: rgba(255, 0, 0, 0.1); 
     }
