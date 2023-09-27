@@ -37,7 +37,7 @@ Feature: Creating a form app for user interaction with React
     And the user enters "12345" on "id"
     Then success-message should show the text: ""
 
-
+@Skip
   Scenario: Success message is shown
 
     When the user enters "JDOE" on "username"

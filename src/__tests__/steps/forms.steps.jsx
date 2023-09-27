@@ -46,29 +46,24 @@ export const FormProjectSteps = ({ given: Given, when: When, then: Then }) => {
     fireEvent.click(screen.getByTestId("submit-button"));
   });
 
-  Then(/^success-message should show the text: "(.*)"$/, async (arg0) => {
-    let message = screen.getByTestId("success-message").textContent;
-    await waitFor(() => {
-      expect(screen.getByTestId("success-message")).toBeInTheDocument();
-    });
+  Then(/^success-message should show the text: "(.*)"$/, async (expectedMessage) => {
 
-    expect(screen.getByTestId("success-message")).toHaveTextContent(
-      "User created successfully"
-    );
+    const successMessage = screen.getByTestId('success-message');
+    expect(successMessage).toHaveTextContent(expectedMessage);
+    expect(successMessage).toBeInTheDocument();
+  
   });
 
   //Success message is not shown
 
   Then(/^success-message should not show the text: "(.*)"$/, (arg0) => {
-    expect(screen.getByTestId("success-message")).not.toHaveValue(
-      "User created successfully"
-    );
+    expect(screen.getByTestId("success-message")).toHaveTextContent("")
   });
 
   //Scenario Outline: User fills in the form incorrectly
 
   Then('the success-message should show the text: ""', () => {
-    expect(screen.getByTestId("success-message")).toHaveTextContent("");
+    expect(screen.getByTestId("success-message").toHaveTextContent(""));
   });
 
   // Scenario: User clears the form

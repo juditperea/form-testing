@@ -89,23 +89,27 @@ function FormApp () {
     e.preventDefault()
 
     const newErrorFields = {
-      username: !formData.username,
-      name: !formData.name,
-      surname: !formData.surname,
-      country: !formData.country,
-      id: !formData.id || !validateID(formData.id, formData.country)
+      username: validateUsername(formData.username),
+      name: formData.name !== '',
+      surname: formData.surname !== '',
+      country: formData.country !== '',
+      id: validateID(formData.id, formData.country)
     }
 
     setErrorFields(newErrorFields)
 
-    const valores = Object.values(newErrorFields)
-    const algunCampoVacio = valores.some(valor => valor === false)
-    if (algunCampoVacio) {
+    const hasErrors = Object.values(newErrorFields).every(value => !!value)
+    const hasEmptyFields = Object.values(formData).some(value => value === '')
+
+    if (!hasErrors && !hasEmptyFields) {
+      setIsFormValid(true)
       setSuccessMessage('User created successfully')
     } else {
       setIsFormValid(false)
       setSuccessMessage('')
     }
+    console.log(newErrorFields)
+    console.log(setIsFormValid)
   }
 
   useEffect(() => {
@@ -224,12 +228,10 @@ function FormApp () {
           </button>
         </div>
         <p className='success-message' data-testid='success-message'>
-          {successMessage !== '' ? successMessage : ''}
+          {isFormValid && successMessage}
         </p>
-        
       </form>
     </div>
-    
   )
 }
 
