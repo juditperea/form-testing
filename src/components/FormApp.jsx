@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import '../App.css'
-
+import UsernameInput from './UsernameInput'
+import NameInput from './NameInput'
+import SurnameInput from './SurnameInput'
+import CountrySelect from './CountrySelect'
+import IDInput from './IDInput'
+import SubmitButton from './SubmitButton'
+import ClearButton from './ClearButton'
 function FormApp () {
   const MAX_USERNAME_LENGTH = 10
   const [usernameAlert, setUsernameAlert] = useState('')
@@ -134,98 +140,51 @@ function FormApp () {
   return (
     <div>
       <form>
-        <div>
-          <p>Username</p>
-          <p className='message-error' data-testid='message-error'>
-            {usernameAlert && usernameAlert}
-          </p>
-          <input
-            type='text'
-            data-testid='username'
-            value={formData.username}
-            onChange={e =>
-              setFormData({
-                ...formData,
-                username: e.target.value.toUpperCase()
-              })
-            }
-          />
-        </div>
-        <div>
-          <p>Name</p>
-          <input
-            type='text'
-            value={formData.name}
-            onChange={e =>
-              setFormData({ ...formData, name: e.target.value.toUpperCase() })
-            }
-            data-testid='firstname'
-          />
-        </div>
-        <div>
-          <p>Surname</p>
-          <input
-            type='text'
-            value={formData.surname}
-            onChange={e =>
-              setFormData({
-                ...formData,
-                surname: e.target.value.toUpperCase()
-              })
-            }
-            data-testid='surname'
-          />
-        </div>
-        <div>
-          <p>Country</p>
-          <select
-            value={formData.country}
-            onChange={e =>
-              setFormData({
-                ...formData,
-                country: e.target.value.toUpperCase()
-              })
-            }
-            data-testid='country'
-          >
-            <option value='' data-testid='country-option-empty'>
-              Select country
-            </option>
-            <option value='SPAIN' data-testid='spain'>
-              SPAIN
-            </option>
-            <option value='ARGENTINA' data-testid='argentina'>
-              ARGENTINA
-            </option>
-          </select>
-        </div>
-        <div>
-          <p>ID</p>
-          <input
-            type='text'
-            value={formData.id.toUpperCase()}
-            onChange={handleIDChange}
-            data-testid='id'
-          />
-          <p className='message-error'>{idAlert}</p>
-        </div>
+      <UsernameInput
+          value={formData.username}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              username: e.target.value.toUpperCase(),
+            })
+          }
+          usernameAlert={usernameAlert}
+        />
+         <NameInput
+          value={formData.name}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              name: e.target.value.toUpperCase(),
+            })
+          }
+        />
+            <SurnameInput
+          value={formData.surname}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              surname: e.target.value.toUpperCase(),
+            })
+          }
+        />
+          <CountrySelect
+          value={formData.country}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              country: e.target.value.toUpperCase(),
+            })
+          }
+        />
+         <IDInput
+          value={formData.id}
+          onChange={handleIDChange}
+          idAlert={idAlert}
+        />
         <div className='buttondiv'>
-          <button
-            type='submit'
-            data-testid='submit-button'
-            className='submit'
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
-          <button
-            type='button'
-            onClick={clearForm}
-            data-testid='clear-button'
-            className='clear'
-          >
-            Clear
-          </button>
+          <SubmitButton onClick={handleSubmit} />
+          <ClearButton onClick={clearForm} />
         </div>
         <p className='success-message' data-testid='success-message'>
           {isFormValid && successMessage}
