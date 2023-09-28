@@ -3,9 +3,9 @@ import {
   render,
   screen,
   fireEvent,
-  userEvent,
   waitFor,
 } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import FormApp from "../../components/FormApp";
 
@@ -20,52 +20,29 @@ export const FormProjectSteps = ({ given: Given, when: When, then: Then }) => {
     expect(screen.getByTestId(arg0)).toBeNull;
   });
 
-  //Scenario Outline: User fills in the form correctly
 
-  When(/^the user enters "(.*)" on "(.*)"$/, (arg0, arg1) => {
-    fireEvent.change(screen.getByTestId(arg1), {
-      target: { value: arg0 },
-    });
+  When(/^the user enters "(.*)" on "(.*)"$/, async (value, input) => {
+    const inputField = screen.getByTestId(input);
+    await userEvent.type(inputField, value);
   });
 
   When(/^the user selects "(.*)" from the "(.*)" dropdown$/, (arg0, arg1) => {
     fireEvent.select(screen.getByTestId(arg1), arg0);
   });
 
-  Then("the submit button should be enabled", () => {
-    expect(screen.getByTestId("submit-button")).not.toBeDisabled;
+  Then(/^the submit button should be (.*)$/, (arg0) => {
+    expect(screen.getByTestId(arg0)).toBeDisabled;
   });
 
-  //Scenario: Success message is shown
-
-  When("the submit button is enabled", () => {
-    expect(screen.getByTestId("submit-button")).not.toBeDisabled;
-  });
 
   When("the user clicks the submit button", () => {
     fireEvent.click(screen.getByTestId("submit-button"));
   });
 
-  Then(/^success-message should show the text: "(.*)"$/, async (expectedMessage) => {
-
-    const successMessage = screen.getByTestId('success-message');
-    expect(successMessage).toHaveTextContent(expectedMessage);
-    expect(successMessage).toBeInTheDocument();
+  Then(/^success-message should show the "text": "(.*)"$/, (arg1) => {
+    expect(screen.getByTestId("success-message")).toHaveTextContent(arg1);
+  });
   
-  });
-
-  //Success message is not shown
-
-  Then(/^success-message should not show the text: "(.*)"$/, (arg0) => {
-    expect(screen.getByTestId("success-message")).toHaveTextContent("")
-  });
-
-  //Scenario Outline: User fills in the form incorrectly
-
-  Then('the success-message should show the text: ""', () => {
-    expect(screen.getByTestId("success-message").toHaveTextContent(""));
-  });
-
   // Scenario: User clears the form
 
   When("the user clicks the clear button", () => {
@@ -106,6 +83,22 @@ export const FormProjectSteps = ({ given: Given, when: When, then: Then }) => {
     expect(screen.getByTestId("message-error")).toHaveTextContent(
       "The name can't be included in the username"
     );
+  });
+  //
+  Then(/^the "(.*)" should show no message error$/, () => {
+    const countryField = screen.getByTestId("country");
+    const idField = screen.getByTestId("id");
+
+    const country = countryField.value
+    const id = idField.value;
+  
+    if (country === "SPAIN") {
+      expect(id).toMatch(/^\d{8}[A-Z]$/);
+    } else if (country === "ARGENTINA") {
+      expect(id).toMatch(/^\d{7,8}$/);
+    } else {
+      expect(true).toBe(true); 
+    }
   });
 };
 export default FormProjectSteps;

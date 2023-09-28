@@ -38,7 +38,7 @@ function FormApp () {
     id: false
   })
 
-  function validateIDByCountry (id, country) {
+  function validateIDSpain (id, country) {
     const VALID_LETTERS = 'TRWAGMYFPDXBNJZSQVHLCKE'
     const ID_NUMBER = id.substring(0, id.length - 1)
     const ID_LETTER = id.charAt(id.length - 1).toUpperCase()
@@ -52,23 +52,25 @@ function FormApp () {
         return false
       }
       return ID_LETTER === calculatedLetter
-    } else if (country === 'ARGENTINA') {
-      if (!(id.length === 7 || id.length === 8) || !/^\d+$/.test(ID_NUMBER)) {
-        return false
-      }
-      return ID_LETTER === calculatedLetter
-    }
+    } 
   }
+  function validateIDArgentina(id){
+      id = id.replace(/\s|-/g, '');
+    
+      return /^\d{7,8}$/.test(id);
+    
+  }
+
 
   function validateID (id, country) {
     if (country === 'SPAIN') {
-      if (!validateIDByCountry(id, country)) {
+      if (!validateIDSpain(id,country)) {
         setIdAlert('Enter a valid ID for Spain')
       } else {
         setIdAlert('')
       }
     } else if (country === 'ARGENTINA') {
-      if (!validateIDByCountry(id, country)) {
+      if (!validateIDArgentina(id,country)) {
         setIdAlert('Enter a valid ID for Argentina')
       } else {
         setIdAlert('')
@@ -114,8 +116,6 @@ function FormApp () {
       setIsFormValid(false)
       setSuccessMessage('')
     }
-    console.log(newErrorFields)
-    console.log(setIsFormValid)
   }
 
   useEffect(() => {
@@ -187,8 +187,9 @@ function FormApp () {
           <ClearButton onClick={clearForm} />
         </div>
         <p className='success-message' data-testid='success-message'>
-          {isFormValid && successMessage}
+         {successMessage}
         </p>
+
       </form>
     </div>
   )

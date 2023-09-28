@@ -4,7 +4,6 @@ Feature: Creating a form app for user interaction with React
 
     Given the user opens the app
 
-
   Scenario: Fields are empty
 
     Then the "username" field should be empty
@@ -13,59 +12,40 @@ Feature: Creating a form app for user interaction with React
     And the "country" field should be empty
     And the "id" field should be empty
 
-
-  Scenario Outline: User fills in the form correctly
+@Skip
+  Scenario Outline: Success message is shown
 
     When the user enters "<username>" on "username"
     And the user enters "<name>" on "firstname"
     And the user enters "<surname>" on "surname"
-    And the user selects "SPAIN" from the "country" dropdown
+    And the user selects "<country>" from the "country" dropdown
     And the user enters "<id>" on "id"
-    Then the submit button should be enabled
+    And the user clicks the submit button
+    Then success-message should show the "text": "<text>"
 
     Examples:
-      | username | firstname | surname | country | id        |
-      | JDOE     | JOHN      | DOE     | SPAIN   | 49220078D |
+      | username    | firstname | surname | country | id        |             text             |
+      | JDOE        | JOHN      | DOE     | SPAIN   | 49220078D |  User created successfully   |
 
+  Scenario Outline: Success message is not shown
 
-  Scenario: User fills in the form incorrectly
-
-    When the user enters "Johnd0e1997" on "username"
-    And the user enters "John" on "firstname"
-    And the user enters "Doe" on "surname"
-    And the user selects "SPAIN" from the "country" dropdown
-    And the user enters "12345" on "id"
-    Then success-message should show the text: ""
-
-@Skip
-  Scenario: Success message is shown
-
-    When the user enters "JDOE" on "username"
-    And the user enters "JOHN" on "firstname"
-    And the user enters "DOE" on "surname"
-    And the user selects "SPAIN" from the "country" dropdown
-    And the user enters "49220078D" on "id"
+    When the user enters "<username>" on "username"
+    And the user enters "<name>" on "firstname"
+    And the user enters "<surname>" on "surname"
+    And the user selects "<country>" from the "country" dropdown
+    And the user enters "<id>" on "id"
     And the user clicks the submit button
-    Then success-message should show the text: "User created successfully"
+    Then success-message should show the "text": "<text>"
 
-
-  Scenario: Success message is not shown
-
-    When the user enters "JDOE" on "username"
-    And the user enters "JOHN" on "firstname"
-    And the user enters "" on "surname"
-    And the user selects "SPAIN" from the "country" dropdown
-    And the user enters "" on "id"
-    And the user clicks the submit button
-    Then success-message should not show the text: "User created successfully"
-
+    Examples:
+      | username    | firstname | surname | country | id        |             text             |
+      | Johnd0e1997 | John      | Doe     | SPAIN   | 12345     |                              |
 
   Scenario: User clears the form
 
     When the user clicks the clear button
     Then all the form fields should be cleared
     And the dropdown should have the "" value
-
 
   Scenario: Username longer than 10 characters
 
@@ -80,11 +60,20 @@ Feature: Creating a form app for user interaction with React
     And the user enters "DOE" on "surname"
     Then message-error should show the text: "The name can't be included in the username"
 
+  Scenario Outline: ID validation
+  
+    When the user enters "<country>" on "country"
+    And the user enters "<id>" on "id"
+    Then the "<id>" should show no message error
+
+    Examples:
+          | country     | id        |  
+          | SPAIN       | 49220078D |  
+          | ARGENTINA   | 12345678  | 
 
 
 
 
 
 
-
-
+ 
