@@ -7,6 +7,8 @@ import CountrySelect from './CountrySelect'
 import IDInput from './IDInput'
 import SubmitButton from './SubmitButton'
 import ClearButton from './ClearButton'
+import CityInput from './CityInput';
+import StreetInput from './StreetInput';
 function FormApp () {
   const MAX_USERNAME_LENGTH = 10
   const [usernameAlert, setUsernameAlert] = useState('')
@@ -18,6 +20,8 @@ function FormApp () {
     name: '',
     surname: '',
     country: '',
+    city: '',
+    street: '',
     id: ''
   })
   const clearForm = () => {
@@ -26,8 +30,11 @@ function FormApp () {
       name: '',
       surname: '',
       country: '',
+      city: '',
+      street: '',
       id: ''
     })
+    
     setSuccessMessage('')
   }
   const [errorFields, setErrorFields] = useState({
@@ -35,6 +42,8 @@ function FormApp () {
     name: false,
     surname: false,
     country: false,
+    city: false,
+    street: false,
     id: false
   })
 
@@ -101,6 +110,8 @@ function FormApp () {
       name: formData.name !== '',
       surname: formData.surname !== '',
       country: formData.country !== '',
+      city: formData.country !== '',
+      street: formData.country !== '',
       id: validateID(formData.id, formData.country)
     }
 
@@ -173,10 +184,33 @@ function FormApp () {
           onChange={(e) =>
             setFormData({
               ...formData,
-              country: e.target.value.toUpperCase(),
+              country: e.target.value,
             })
           }
         />
+         <CityInput
+          type="text"
+          placeholder="City"
+          value={formData.city}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              city: e.target.value.toUpperCase(),
+            })
+          }
+        />
+         <StreetInput
+          type="text"
+          placeholder="Street"
+          value={formData.street}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              street: e.target.value.toUpperCase(),
+            })
+          }
+        />
+       
          <IDInput
           value={formData.id}
           onChange={handleIDChange}

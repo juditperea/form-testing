@@ -10,6 +10,8 @@ Feature: Creating a form app for user interaction with React
     And the "firstname" field should be empty
     And the "surname" field should be empty
     And the "country" field should be empty
+    And the "city" field should be empty
+    And the "street" field should be empty
     And the "id" field should be empty
 
 @Skip
@@ -19,13 +21,15 @@ Feature: Creating a form app for user interaction with React
     And the user enters "<name>" on "firstname"
     And the user enters "<surname>" on "surname"
     And the user selects "<country>" from the "country" dropdown
+    And the user enters "<city>" on "city"
+    And the user enters "<street>" on "street"
     And the user enters "<id>" on "id"
     And the user clicks the submit button
     Then success-message should show the "text": "<text>"
 
     Examples:
-      | username    | firstname | surname | country | id        |             text             |
-      | JDOE        | JOHN      | DOE     | SPAIN   | 49220078D |  User created successfully   |
+      | username    | firstname | surname | country | city      | street         |    id     |             text             |
+      | JDOE        | JOHN      | DOE     | SPAIN   | SEVILLA   |  OXFORD ST.,14 | 49220078D |  User created successfully   |
 
   Scenario Outline: Success message is not shown
 
@@ -33,13 +37,15 @@ Feature: Creating a form app for user interaction with React
     And the user enters "<name>" on "firstname"
     And the user enters "<surname>" on "surname"
     And the user selects "<country>" from the "country" dropdown
+    And the user enters "<city>" on "city"
+    And the user enters "<street>" on "street"
     And the user enters "<id>" on "id"
     And the user clicks the submit button
     Then success-message should show the "text": "<text>"
 
-    Examples:
-      | username    | firstname | surname | country | id        |             text             |
-      | Johnd0e1997 | John      | Doe     | SPAIN   | 12345     |                              |
+  Examples:
+      | username    | firstname | surname | country | city      | street         |    id     |             text             |
+      | JDOE        | JOHN      | DOE     | SPAIN   | SEVILLA   |  OXFORD ST.,14 |   12345   |                              |
 
   Scenario: User clears the form
 

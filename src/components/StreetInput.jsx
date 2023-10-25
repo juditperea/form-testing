@@ -1,17 +1,17 @@
 import React from 'react';
 
-function NameInput({ value, onChange }) {
+function StreetInput({ value, onChange }) {
   return (
     <div>
-      <p>Name</p>
+      <p>Street</p>
       <input
         type='text'
         value={value.toUpperCase()}
         onChange={onChange}
-        data-testid='firstname'
+        data-testid='street'
       />
     </div>
   );
 }
 
-export default NameInput;
+export default StreetInput;
