@@ -9,7 +9,26 @@ import SubmitButton from './SubmitButton'
 import ClearButton from './ClearButton'
 import CityInput from './CityInput';
 import StreetInput from './StreetInput';
+import { useMutation, gql } from '@apollo/client';
+
+const CREATE_USER = gql`
+  mutation CreateUser($id: String!, $username: String!, $name: String!, $surname: String!, $address: AddressInput!) {
+    createUser(id: $id, username: $username, name: $name, surname: $surname, address: $address) {
+      id
+      username
+      name
+      surname
+      address {
+        country
+        street
+        city
+      }
+    }
+  }
+`;
+
 function FormApp () {
+  const [createUser] = useMutation(CREATE_USER);
   const MAX_USERNAME_LENGTH = 10
   const [usernameAlert, setUsernameAlert] = useState('')
   const [isFormValid, setIsFormValid] = useState('')
@@ -102,7 +121,7 @@ function FormApp () {
       setUsernameAlert('')
     }
   }
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     const newErrorFields = {
@@ -121,9 +140,28 @@ function FormApp () {
     const hasEmptyFields = Object.values(formData).some(value => value === '')
 
     if (!hasErrors && !hasEmptyFields) {
-      setIsFormValid(true)
-      setSuccessMessage('User created successfully')
-    } else {
+      try {
+        await createUser({
+          variables: {
+            id: formData.id,
+            username: formData.username,
+            name: formData.name,
+            surname: formData.surname,
+            address: {
+              country: formData.country,
+              street: formData.street,
+              city: formData.city,
+            },
+          },
+        });
+        setIsFormValid(true);
+        setSuccessMessage('User created successfully');
+      } catch (error) {
+        console.error('Error creating user:', error);
+        setIsFormValid(false);
+        setSuccessMessage('');
+      }
+    }else {
       setIsFormValid(false)
       setSuccessMessage('')
     }

@@ -12,7 +12,14 @@
     "test:single": "jest --config jest.config.cjs --testRegex jest-cucumber-setup-single.js"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.6",
     "@testing-library/user-event": "^14.5.0",
+    "apollo-server-express": "^3.12.1",
+    "express": "^4.18.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.8.1",
+    "graphql-tools": "^9.0.0",
+    "mongoose": "^7.6.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwind": "^4.0.0",
