@@ -7,28 +7,10 @@ import CountrySelect from './CountrySelect'
 import IDInput from './IDInput'
 import SubmitButton from './SubmitButton'
 import ClearButton from './ClearButton'
-import CityInput from './CityInput';
-import StreetInput from './StreetInput';
-import { useMutation, gql } from '@apollo/client';
-
-const CREATE_USER = gql`
-  mutation CreateUser($id: String!, $username: String!, $name: String!, $surname: String!, $address: AddressInput!) {
-    createUser(id: $id, username: $username, name: $name, surname: $surname, address: $address) {
-      id
-      username
-      name
-      surname
-      address {
-        country
-        street
-        city
-      }
-    }
-  }
-`;
+import CityInput from './CityInput'
+import StreetInput from './StreetInput'
 
 function FormApp () {
-  const [createUser] = useMutation(CREATE_USER);
   const MAX_USERNAME_LENGTH = 10
   const [usernameAlert, setUsernameAlert] = useState('')
   const [isFormValid, setIsFormValid] = useState('')
@@ -121,51 +103,44 @@ function FormApp () {
       setUsernameAlert('')
     }
   }
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  function handleSubmit() {
+    // Construir el objeto de usuario desde el estado de tu componente React
+    const user = {
+        username: formData.username,
+        name: formData.name,
+        surname: formData.surname,
+        country: formData.country,
+        city: formData.city,
+        street: formData.street,
+        id: formData.id
+    };
 
-    const newErrorFields = {
-      username: validateUsername(formData.username),
-      name: formData.name !== '',
-      surname: formData.surname !== '',
-      country: formData.country !== '',
-      city: formData.country !== '',
-      street: formData.country !== '',
-      id: validateID(formData.id, formData.country)
-    }
+    // Enviar la solicitud POST al backend Spring
+    fetch('http://localhost:8080/userS', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    })
+    .then(response => {
+        if (response.ok) {
+            // La solicitud se ha completado correctamente
+            console.log('Usuario creado exitosamente');
+            setSuccessMessage('User created successfully');
+        } else {
+            // Manejar errores si la solicitud falla
+            console.error('Error al crear el usuario');
+            setSuccessMessage('Failed to create user');
+        }
+    })
+    .catch(error => {
+        // Manejar errores de red u otros errores
+        console.error('Error:', error);
+        setSuccessMessage('Failed to create user');
+    });
+}
 
-    setErrorFields(newErrorFields)
-
-    const hasErrors = Object.values(newErrorFields).every(value => !!value)
-    const hasEmptyFields = Object.values(formData).some(value => value === '')
-
-    if (!hasErrors && !hasEmptyFields) {
-      try {
-        await createUser({
-          variables: {
-            id: formData.id,
-            username: formData.username,
-            name: formData.name,
-            surname: formData.surname,
-            address: {
-              country: formData.country,
-              street: formData.street,
-              city: formData.city,
-            },
-          },
-        });
-        setIsFormValid(true);
-        setSuccessMessage('User created successfully');
-      } catch (error) {
-        console.error('Error creating user:', error);
-        setIsFormValid(false);
-        setSuccessMessage('');
-      }
-    }else {
-      setIsFormValid(false)
-      setSuccessMessage('')
-    }
-  }
 
   useEffect(() => {
     validateUsername(formData.username)
@@ -185,7 +160,9 @@ function FormApp () {
     const newID = e.target.value
     setFormData({ ...formData, id: newID })
   }
-
+ 
+  
+  
   return (
     <div>
       <form>
