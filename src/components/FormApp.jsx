@@ -103,7 +103,8 @@ function FormApp () {
       setUsernameAlert('')
     }
   }
-  function handleSubmit() {
+  function handleSubmit(e) {
+    e.preventDefault();
     // Construir el objeto de usuario desde el estado de tu componente React
     const user = {
         username: formData.username,
@@ -116,30 +117,19 @@ function FormApp () {
     };
 
     // Enviar la solicitud POST al backend Spring
-    fetch('http://localhost:8080/userS', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
+    fetch('http://localhost:8080/users', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    //credentials: 'include', // Esto es importante para enviar las cookies junto con la solicitud
+    body: JSON.stringify(user),
     })
-    .then(response => {
-        if (response.ok) {
-            // La solicitud se ha completado correctamente
-            console.log('Usuario creado exitosamente');
-            setSuccessMessage('User created successfully');
-        } else {
-            // Manejar errores si la solicitud falla
-            console.error('Error al crear el usuario');
-            setSuccessMessage('Failed to create user');
-        }
-    })
-    .catch(error => {
-        // Manejar errores de red u otros errores
-        console.error('Error:', error);
-        setSuccessMessage('Failed to create user');
-    });
-}
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+
+    }
 
 
   useEffect(() => {
