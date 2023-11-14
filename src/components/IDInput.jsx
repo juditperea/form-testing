@@ -6,7 +6,7 @@ function IDInput({ value, onChange, idAlert }) {
       <p>ID</p>
       <input
         type='text'
-        value={value.toUpperCase()}
+        value={value ? value.toUpperCase() : ''}
         onChange={onChange}
         data-testid='id'
       />

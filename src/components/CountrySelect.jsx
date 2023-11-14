@@ -5,10 +5,12 @@ function CountrySelect({ value, onChange }) {
     <div>
       <p>Country</p>
       <select
-        value={value}
-        onChange={onChange}
-        data-testid='country'
-      >
+       value={value.toUpperCase()}
+       onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+       data-testid='country'
+       >
+        
+      
         <option value='' data-testid='country-option-empty'>
           Select country
         </option>

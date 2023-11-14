@@ -16,6 +16,7 @@ function FormApp () {
   const [isFormValid, setIsFormValid] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const [idAlert, setIdAlert] = useState('')
+  const [mockUsers, setMockUsers] = useState([]);
   const [formData, setFormData] = useState({
     username: '',
     name: '',
@@ -48,6 +49,7 @@ function FormApp () {
     id: false
   })
 
+  
   function validateIDSpain (id, country) {
     const VALID_LETTERS = 'TRWAGMYFPDXBNJZSQVHLCKE'
     const ID_NUMBER = id.substring(0, id.length - 1)
@@ -103,35 +105,7 @@ function FormApp () {
       setUsernameAlert('')
     }
   }
-  function handleSubmit(e) {
-    e.preventDefault();
-    // Construir el objeto de usuario desde el estado de tu componente React
-    const user = {
-        username: formData.username,
-        name: formData.name,
-        surname: formData.surname,
-        country: formData.country,
-        city: formData.city,
-        street: formData.street,
-        id: formData.id
-    };
-
-    // Enviar la solicitud POST al backend Spring
-    fetch('http://localhost:8080/users', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    //credentials: 'include', // Esto es importante para enviar las cookies junto con la solicitud
-    body: JSON.stringify(user),
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error(error));
-
-    }
-
-
+  
   useEffect(() => {
     validateUsername(formData.username)
     return () => {
@@ -150,13 +124,60 @@ function FormApp () {
     const newID = e.target.value
     setFormData({ ...formData, id: newID })
   }
- 
+  function handleSubmit(e) {
+    e.preventDefault();
+    // Construir el objeto de usuario desde el estado de tu componente React
+    const user = {
+      username: formData.username,
+      name: formData.name,
+      surname: formData.surname,
+      country: formData.country,
+      city: formData.city,
+      street: formData.street,
+      id: formData.id,
+    };
+  }
+
+  useEffect(() => {
+    // Fetch Mockoon data when the component mounts
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:4090/api/v1/accounts/'); 
+        const data = await response.json();
+        // Fetch 10 random users from the response
+        const randomUsers = getRandomUsers(data, 10);
+        setMockUsers(randomUsers);
+      } catch (error) {
+        console.error('Error fetching Mockoon data:', error);
+      }
+    };
+
+    fetchData();
+
+  }, []);
+
+  const handleMockUserClick = (mockUser) => {
+    setFormData({
+      username: mockUser.username,
+      name: mockUser.personal_data.name,
+      surname: mockUser.personal_data.surname,
+      country: mockUser.country,
+      city: mockUser.city,
+      street: mockUser.street,
+      id: mockUser.user_id,
+    });
+  };
   
-  
+
+  const getRandomUsers = (users, count) => {
+    const shuffled = users.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  };
+
   return (
     <div>
       <form>
-      <UsernameInput
+        <UsernameInput
           value={formData.username}
           onChange={(e) =>
             setFormData({
@@ -166,7 +187,7 @@ function FormApp () {
           }
           usernameAlert={usernameAlert}
         />
-         <NameInput
+        <NameInput
           value={formData.name}
           onChange={(e) =>
             setFormData({
@@ -175,7 +196,7 @@ function FormApp () {
             })
           }
         />
-            <SurnameInput
+        <SurnameInput
           value={formData.surname}
           onChange={(e) =>
             setFormData({
@@ -184,16 +205,17 @@ function FormApp () {
             })
           }
         />
-          <CountrySelect
-          value={formData.country}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              country: e.target.value,
-            })
-          }
-        />
-         <CityInput
+        <CountrySelect
+        value={formData.country}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            country: e.target.value,
+          })
+        }
+      />
+
+        <CityInput
           type="text"
           placeholder="City"
           value={formData.city}
@@ -204,7 +226,7 @@ function FormApp () {
             })
           }
         />
-         <StreetInput
+        <StreetInput
           type="text"
           placeholder="Street"
           value={formData.street}
@@ -215,23 +237,31 @@ function FormApp () {
             })
           }
         />
-       
-         <IDInput
+        <IDInput
           value={formData.id}
           onChange={handleIDChange}
           idAlert={idAlert}
         />
-        <div className='buttondiv'>
+        <div className="buttondiv">
           <SubmitButton onClick={handleSubmit} />
           <ClearButton onClick={clearForm} />
         </div>
-        <p className='success-message' data-testid='success-message'>
-         {successMessage}
+        <p className="success-message" data-testid="success-message">
+          {successMessage}
         </p>
-
       </form>
+      <div>
+        <h2>Mock Users:</h2>
+        <ul>
+          {mockUsers.map((user, index) => (
+            <li key={index} onClick={() => handleMockUserClick(user)}>
+              {user.username}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
-  )
+  );
 }
 
 export default FormApp

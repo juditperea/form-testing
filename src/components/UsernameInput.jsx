@@ -9,7 +9,7 @@ function UsernameInput({ value, onChange, usernameAlert }) {
       <input
         type='text'
         data-testid='username'
-        value={value}
+        value={value.toUpperCase()}
         onChange={onChange}
       />
     </div>

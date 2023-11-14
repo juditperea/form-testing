@@ -6,7 +6,7 @@ function SurnameInput({ value, onChange }) {
       <p>Surname</p>
       <input
         type='text'
-        value={value}
+        value={value.toUpperCase() || ''} 
         onChange={onChange}
         data-testid='surname'
       />

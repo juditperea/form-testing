@@ -6,7 +6,7 @@ function CityInput({ value, onChange }) {
       <p>City</p>
       <input
         type='text'
-        value={value.toUpperCase()}
+        value={value ? value.toUpperCase() : ''}
         onChange={onChange}
         data-testid='city'
       />
