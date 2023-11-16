@@ -67,9 +67,9 @@ function FormApp () {
     } 
   }
   function validateIDArgentina(id){
-      id = id.replace(/\s|-/g, '');
+      id = id.replace(/\s|-/g, '')
     
-      return /^\d{7,8}$/.test(id);
+      return /^\d{7,8}$/.test(id)
     
   }
 
@@ -125,36 +125,53 @@ function FormApp () {
     setFormData({ ...formData, id: newID })
   }
   function handleSubmit(e) {
-    e.preventDefault();
-    // Construir el objeto de usuario desde el estado de tu componente React
-    const user = {
-      username: formData.username,
-      name: formData.name,
-      surname: formData.surname,
-      country: formData.country,
-      city: formData.city,
-      street: formData.street,
-      id: formData.id,
-    };
+    e.preventDefault()
+  
+    // Check if none of the fields are empty
+    const noEmptyFields = Object.values(formData).every(value => value !== '')
+  
+    // Check if there are no alerts
+    const noAlerts = usernameAlert === '' && idAlert === ''
+  
+    if (noEmptyFields && noAlerts) {
+      // Construct the user object from the state of your React component
+      const user = {
+        username: formData.username,
+        name: formData.name,
+        surname: formData.surname,
+        country: formData.country,
+        city: formData.city,
+        street: formData.street,
+        id: formData.id,
+      };
+  
+      // Set the success message
+      setSuccessMessage('User created successfully')
+    } else {
+      // Clear the success message if the conditions are not met
+      setSuccessMessage('')
+    }
   }
+  
+  
 
   useEffect(() => {
     // Fetch Mockoon data when the component mounts
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:4090/api/v1/accounts/'); 
-        const data = await response.json();
+        const response = await fetch('http://localhost:4090/api/v1/accounts/')
+        const data = await response.json()
         // Fetch 10 random users from the response
-        const randomUsers = getRandomUsers(data, 10);
-        setMockUsers(randomUsers);
+        const randomUsers = getRandomUsers(data, 10)
+        setMockUsers(randomUsers)
       } catch (error) {
-        console.error('Error fetching Mockoon data:', error);
+        console.error('Error fetching Mockoon data:', error)
       }
     };
 
-    fetchData();
+    fetchData()
 
-  }, []);
+  }, [])
 
   const handleMockUserClick = (mockUser) => {
     setFormData({
@@ -165,14 +182,14 @@ function FormApp () {
       city: mockUser.city,
       street: mockUser.street,
       id: mockUser.user_id,
-    });
-  };
+    })
+  }
   
 
   const getRandomUsers = (users, count) => {
     const shuffled = users.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
-  };
+    return shuffled.slice(0, count)
+  }
 
   return (
     <div>
@@ -261,7 +278,7 @@ function FormApp () {
         </ul>
       </div>
     </div>
-  );
+  )
 }
 
 export default FormApp
