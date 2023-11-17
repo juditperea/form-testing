@@ -159,7 +159,11 @@ function FormApp () {
     // Fetch Mockoon data when the component mounts
     const fetchData = async () => {
       try {
+<<<<<<< Updated upstream
         const response = await fetch('http://localhost:4090/api/v1/accounts/')
+=======
+        const response = await fetch('http://localhost:4090/api/v1/account/')
+>>>>>>> Stashed changes
         const data = await response.json()
         // Fetch 10 random users from the response
         const randomUsers = getRandomUsers(data, 10)
