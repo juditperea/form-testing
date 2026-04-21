@@ -1,8 +1,47 @@
-# React + Vite
+# Form Testing – BDD + Automation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📌 Objective
+This project focuses on testing a form-based application using a **BDD approach** with **Cucumber (Gherkin)** and **automated tests with Jest**.
 
-Currently, two official plugins are available:
+The goal is to validate user interactions, input validations, and edge cases from a functional testing perspective.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## 🧪 Testing Approach
+
+### BDD (Behavior Driven Development)
+Test scenarios are written using **Gherkin syntax** to describe user behavior in a clear and readable way.
+
+Example:
+
+ Given the user is on the form page
+ 
+ When the user submits the form with invalid data
+ 
+ Then an error message should be displayed
+
+## ✅ Test Coverage
+
+### Functional Scenarios
+- Valid form submission
+- Required field validation
+- Invalid input formats
+- Empty fields
+- Boundary values (min/max length)
+
+### Negative Cases
+- Submitting incomplete data
+- Invalid formats
+- Unexpected input values
+
+
+## 🛠 Tech Stack
+- Jest
+- Cucumber / Gherkin
+- JavaScript
+- React (for UI)
+
+## ▶️ How to Run
+
+```bash
+npm install
+npm test
